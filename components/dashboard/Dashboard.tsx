@@ -1,9 +1,19 @@
 'use client';
 
-import { useUsers } from '@/hooks';
+import { useState, useEffect } from 'react';
+import { useDebounce, useUsers } from '@/hooks';
+import { SearchInput } from '@/components/shared';
 
-export default function Dashboard() {
-  const { users, loading, error } = useUsers();
+export const Dashboard = () => {
+  const { users, setSearch, loading, error } = useUsers();
+
+  const [inputValue, setInputValue] = useState('');
+
+  const debouncedSearch = useDebounce(inputValue, 500);
+
+  useEffect(() => {
+    setSearch(debouncedSearch);
+  }, [debouncedSearch, setSearch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -11,6 +21,7 @@ export default function Dashboard() {
   return (
     <div>
       <h1>Users</h1>
+      <SearchInput value={inputValue} onChange={setInputValue} />
       <ul>
         {users.map((u) => (
           <li
@@ -25,4 +36,4 @@ export default function Dashboard() {
       </ul>
     </div>
   );
-}
+};

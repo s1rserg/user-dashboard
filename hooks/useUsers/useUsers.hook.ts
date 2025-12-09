@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { User } from './types';
 
 export const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -23,5 +24,13 @@ export const useUsers = () => {
     fetchUsers();
   }, []);
 
-  return { users, loading, error };
+  const filteredUsers = useMemo(() => {
+    const lowerSearch = search.toLowerCase();
+    return users.filter(
+      (u) =>
+        u.name.toLowerCase().includes(lowerSearch) || u.email.toLowerCase().includes(lowerSearch),
+    );
+  }, [users, search]);
+
+  return { users: filteredUsers, search, setSearch, loading, error };
 };
