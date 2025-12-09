@@ -1,25 +1,11 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-
-const locales = ['en', 'fr'];
-const defaultLocale = 'en';
+import { i18nRouter } from 'next-i18n-router';
+import i18nConfig from './i18nConfig';
+import { NextRequest } from 'next/server';
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
-  );
-
-  if (pathnameHasLocale) return;
-
-  const locale = defaultLocale;
-
-  request.nextUrl.pathname = `/${locale}${pathname}`;
-
-  return NextResponse.redirect(request.nextUrl);
+  return i18nRouter(request, i18nConfig);
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: '/((?!api|static|.*\\..*|_next).*)',
 };
