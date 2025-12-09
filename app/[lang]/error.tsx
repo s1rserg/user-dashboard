@@ -1,6 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+
+const labels: Record<string, { title: string; retry: string }> = {
+  en: { title: 'Something went wrong!', retry: 'Try again' },
+  fr: { title: "Une erreur s'est produite!", retry: 'Réessayer' },
+};
 
 export default function Error({
   error,
@@ -9,20 +15,23 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const pathname = usePathname();
+  const lang = pathname.split('/')[1] || 'en';
+  const dict = labels[lang] || labels['en'];
+
   useEffect(() => {
     console.error(error);
   }, [error]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-[50vh] space-y-4">
-      <h2 className="text-xl font-bold text-red-600">Oops! Something went wrong.</h2>
-      <p className="text-gray-600">{error.message || 'Failed to load users.'}</p>
+    <div className="flex h-full flex-col items-center justify-center gap-4 p-6">
+      <h2 className="text-xl font-bold">{dict.title}</h2>
 
       <button
         onClick={() => reset()}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+        className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
       >
-        Try Again
+        {dict.retry}
       </button>
     </div>
   );

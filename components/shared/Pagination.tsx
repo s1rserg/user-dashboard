@@ -39,7 +39,7 @@ export const Pagination: FC<Props> = ({ totalPages, labels }) => {
         {labels.previous}
       </button>
 
-      <span className="text-sm font-medium text-gray-900">
+      <span className="text-sm font-medium">
         {labels.page} {currentPage} {labels.of} {totalPages}
       </span>
 
