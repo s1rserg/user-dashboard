@@ -1,17 +1,29 @@
 import { getUsers } from '@/lib/api';
+import { SearchInput } from '@/components/shared';
 
 interface Props {
-  params: Promise<{ lang: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default async function Home({ params }: Props) {
+export default async function Home({ searchParams }: Props) {
   const users = await getUsers();
+  const resolvedParams = await searchParams;
+  const query = (resolvedParams?.query as string) || '';
+
+  const filteredUsers = users.filter((u) => {
+    return u.name.toLowerCase().includes(query.toLowerCase());
+  });
+
   return (
     <main className="p-6">
-      {users.map((u) => (
-        <div key={u.id}>{u.name}</div>
-      ))}
+      <div className="mb-4 w-full md:w-1/3">
+        <SearchInput placeholder="Search users..." />
+      </div>
+      <ul>
+        {filteredUsers.map((u) => (
+          <li key={u.id}>{u.name}</li>
+        ))}
+      </ul>
     </main>
   );
 }
