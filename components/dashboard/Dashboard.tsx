@@ -2,20 +2,31 @@
 
 import { useState, useEffect } from 'react';
 import { useDebounce, useUsers } from '@/hooks';
-import { Loader, SearchInput } from '@/components/shared';
+import { Loader, SearchInput, Pagination } from '@/components/shared';
+import { ITEMS_PER_PAGE } from './constants';
 
 export const Dashboard = () => {
   const { users, setSearch, loading, error, refetch } = useUsers();
+
+  const [currentPage, setCurrentPage] = useState(1);
   const [inputValue, setInputValue] = useState('');
+
   const debouncedSearch = useDebounce(inputValue, 500);
+
+  const totalPages = Math.ceil(users.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentUsers = users.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   useEffect(() => {
     setSearch(debouncedSearch);
   }, [debouncedSearch, setSearch]);
 
-  if (loading) {
-    return <Loader />;
-  }
+  const handleSearchChange = (value: string) => {
+    setInputValue(value);
+    setCurrentPage(1);
+  };
+
+  if (loading) return <Loader />;
 
   if (error) {
     return (
@@ -30,12 +41,12 @@ export const Dashboard = () => {
   return (
     <div>
       <h1>Users</h1>
-      <SearchInput value={inputValue} onChange={setInputValue} />
+      <SearchInput value={inputValue} onChange={handleSearchChange} />
 
       {!loading && users.length === 0 && <p>No users found matching {inputValue}</p>}
 
       <ul>
-        {users.map((u) => (
+        {currentUsers.map((u) => (
           <li
             key={u.id}
             style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}
@@ -46,6 +57,8 @@ export const Dashboard = () => {
           </li>
         ))}
       </ul>
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
     </div>
   );
 };
