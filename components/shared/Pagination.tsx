@@ -1,34 +1,49 @@
+'use client';
+
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FC } from 'react';
 
 interface Props {
-  currentPage: number;
   totalPages: number;
-  onPageChange: (newPage: number) => void;
 }
 
-export const Pagination: FC<Props> = ({ currentPage, totalPages, onPageChange }) => {
+export const Pagination: FC<Props> = ({ totalPages }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', newPage.toString());
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
   if (totalPages <= 1) return null;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '20px' }}>
+    <div className="flex justify-center items-center gap-4 mt-8 pb-8">
       <button
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        style={{ cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+        className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
       >
+        <ChevronLeft className="h-4 w-4" />
         Previous
       </button>
 
-      <span style={{ alignSelf: 'center' }}>
+      <span className="text-sm font-medium">
         Page {currentPage} of {totalPages}
       </span>
 
       <button
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        style={{ cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+        className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
       >
         Next
+        <ChevronRight className="h-4 w-4" />
       </button>
     </div>
   );
