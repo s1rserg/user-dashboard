@@ -2,26 +2,38 @@
 
 import { useState, useEffect } from 'react';
 import { useDebounce, useUsers } from '@/hooks';
-import { SearchInput } from '@/components/shared';
+import { Loader, SearchInput } from '@/components/shared';
 
 export const Dashboard = () => {
-  const { users, setSearch, loading, error } = useUsers();
-
+  const { users, setSearch, loading, error, refetch } = useUsers();
   const [inputValue, setInputValue] = useState('');
-
   const debouncedSearch = useDebounce(inputValue, 500);
 
   useEffect(() => {
     setSearch(debouncedSearch);
   }, [debouncedSearch, setSearch]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return (
+      <div style={{ color: 'red', textAlign: 'center', padding: '2rem' }}>
+        <h3>Oops! Something went wrong.</h3>
+        <p>{error}</p>
+        <button onClick={refetch}>Try Again</button>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h1>Users</h1>
       <SearchInput value={inputValue} onChange={setInputValue} />
+
+      {!loading && users.length === 0 && <p>No users found matching {inputValue}</p>}
+
       <ul>
         {users.map((u) => (
           <li
@@ -30,7 +42,7 @@ export const Dashboard = () => {
           >
             <strong>{u.name}</strong> <br />
             {u.email} <br />
-            Company: {u.company.name}
+            <span style={{ color: '#666', fontSize: '0.9em' }}>Company: {u.company.name}</span>
           </li>
         ))}
       </ul>
