@@ -3,22 +3,23 @@ import { FC } from 'react';
 
 interface Props {
   users: User[];
+  headers: { name: string; email: string; company: string };
 }
 
-export const UserTable: FC<Props> = ({ users }) => {
+export const UserTable: FC<Props> = ({ users, headers }) => {
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200">
       <table className="min-w-full divide-y divide-gray-200 bg-white">
         <thead className="hidden bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-              Name
+              {headers.name}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-              Email
+              {headers.email}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-              Company
+              {headers.company}
             </th>
           </tr>
         </thead>

@@ -7,9 +7,15 @@ import { FC } from 'react';
 interface Props {
   users: User[];
   searchParams: { [key: string]: string | string[] | undefined };
+  dict: {
+    search: { placeholder: string };
+    table: { headers: { name: string; email: string; company: string } };
+    pagination: { previous: string; next: string; page: string; of: string };
+    home: { notFound: string; title: string };
+  };
 }
 
-export const Dashboard: FC<Props> = ({ users, searchParams }) => {
+export const Dashboard: FC<Props> = ({ users, searchParams, dict }) => {
   const query = (searchParams?.query as string) || '';
   const currentPage = Number(searchParams?.page) || 1;
 
@@ -24,15 +30,17 @@ export const Dashboard: FC<Props> = ({ users, searchParams }) => {
 
   return (
     <div className="space-y-6">
-      <SearchInput placeholder="Search..." />
+      <SearchInput placeholder={dict.search.placeholder} />
 
       {paginatedUsers.length === 0 ? (
-        <p className="text-gray-500">Not found {query}</p>
+        <p className="text-gray-500">
+          {dict.home.notFound} {query}
+        </p>
       ) : (
-        <UserTable users={paginatedUsers} />
+        <UserTable users={paginatedUsers} headers={dict.table.headers} />
       )}
 
-      <Pagination totalPages={totalPages} />
+      <Pagination totalPages={totalPages} labels={dict.pagination} />
     </div>
   );
 };

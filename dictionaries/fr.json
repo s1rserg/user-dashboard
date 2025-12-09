@@ -1,0 +1,22 @@
+{
+  "home": {
+    "title": "Utilisateurs",
+    "notFound": "Aucun utilisateur trouvé correspondant"
+  },
+  "search": {
+    "placeholder": "Rechercher des utilisateurs..."
+  },
+  "table": {
+    "headers": {
+      "name": "Nom",
+      "email": "Email",
+      "company": "Entreprise"
+    }
+  },
+  "pagination": {
+    "previous": "Précédent",
+    "next": "Suivant",
+    "page": "Page",
+    "of": "sur"
+  }
+}

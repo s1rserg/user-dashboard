@@ -1,0 +1,22 @@
+{
+  "home": {
+    "title": "Users",
+    "notFound": "No users found matching"
+  },
+  "search": {
+    "placeholder": "Search users..."
+  },
+  "table": {
+    "headers": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company"
+    }
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of"
+  }
+}
