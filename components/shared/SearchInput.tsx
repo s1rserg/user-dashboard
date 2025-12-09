@@ -3,9 +3,13 @@
 import { Search } from 'lucide-react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDebounce } from '@/hooks';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
-export const SearchInput = () => {
+interface Props {
+  placeholder: string;
+}
+
+export const SearchInput: FC<Props> = ({ placeholder }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -32,12 +36,12 @@ export const SearchInput = () => {
   return (
     <div className="relative flex flex-1 flex-shrink-0">
       <label htmlFor="search" className="sr-only">
-        Search
+        {placeholder}
       </label>
       <input
         id="search"
         className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-none placeholder:text-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition-all"
-        placeholder="Search users..."
+        placeholder={placeholder}
         onChange={(e) => setText(e.target.value)}
         value={text}
       />

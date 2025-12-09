@@ -3,9 +3,14 @@ import { FC } from 'react';
 
 interface Props {
   users: User[];
+  headers: {
+    name: string;
+    email: string;
+    company: string;
+  };
 }
 
-export const UserTable: FC<Props> = ({ users }) => {
+export const UserTable: FC<Props> = ({ users, headers }) => {
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -17,19 +22,19 @@ export const UserTable: FC<Props> = ({ users }) => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
                 >
-                  Name
+                  {headers.name}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
                 >
-                  Email
+                  {headers.email}
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
                 >
-                  Company
+                  {headers.company}
                 </th>
               </tr>
             </thead>

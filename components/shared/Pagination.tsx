@@ -6,9 +6,15 @@ import { FC } from 'react';
 
 interface Props {
   totalPages: number;
+  labels: {
+    previous: string;
+    next: string;
+    page: string;
+    of: string;
+  };
 }
 
-export const Pagination: FC<Props> = ({ totalPages }) => {
+export const Pagination: FC<Props> = ({ totalPages, labels }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,11 +36,11 @@ export const Pagination: FC<Props> = ({ totalPages }) => {
         className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
       >
         <ChevronLeft className="h-4 w-4" />
-        Previous
+        {labels.previous}
       </button>
 
-      <span className="text-sm font-medium">
-        Page {currentPage} of {totalPages}
+      <span className="text-sm font-medium text-gray-900">
+        {labels.page} {currentPage} {labels.of} {totalPages}
       </span>
 
       <button
@@ -42,7 +48,7 @@ export const Pagination: FC<Props> = ({ totalPages }) => {
         disabled={currentPage === totalPages}
         className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
       >
-        Next
+        {labels.next}
         <ChevronRight className="h-4 w-4" />
       </button>
     </div>
